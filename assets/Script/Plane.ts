@@ -4,6 +4,13 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class NewClass extends cc.Component {
 
+    preClickPos: cc.Vec2;
+    curClickPos: cc.Vec2;
+
+    blocks: cc.Node[] = [];
+    clickedBlock: cc.Node = null;
+
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
@@ -11,7 +18,12 @@ export default class NewClass extends cc.Component {
     }
 
     start () {
+        
+    }
 
+    addBlock(go) {
+        this.node.addChild(go);
+        this.blocks.push(go);
     }
 
     onListener() {
@@ -21,20 +33,30 @@ export default class NewClass extends cc.Component {
         this.node.on(cc.Node.EventType.MOUSE_LEAVE, this.touchCancel, this);
     }
 
-    touchCancel(ev): any {
+    touchCancel(ev) {
 
     }
 
-    touchMove(ev): any {
+    touchMove(ev) {
 
     }
 
-    touchEnd(ev): any {
-
+    touchEnd(ev) {
+        let evPos = ev.getLocation();
+        this.curClickPos = this.node.convertToNodeSpaceAR(evPos);
     }
 
-    touchStart(ev): any {
-        let pos = ev.getLocation();
+    touchStart(ev) {
+        let evPos = ev.getLocation();
+        this.preClickPos = this.node.convertToNodeSpaceAR(evPos);
+
+        console.log( this.preClickPos);
+    }
+
+
+    checkClickBlock(pos: cc.Vec2) {
+        
+
     }
 
     // update (dt) {}

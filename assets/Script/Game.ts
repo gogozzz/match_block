@@ -8,12 +8,14 @@
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import Plane from "./Plane"
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class NewClass extends cc.Component {
 
-    @property(cc.Node)
+    @property(Plane)
     plane = null;
     @property(cc.Prefab)
     block = null;
@@ -33,7 +35,7 @@ export default class NewClass extends cc.Component {
 
                 go.setPosition(pos);
 
-                this.plane.addChild(go);
+                this.plane.addBlock(go);
 
             }
         }
@@ -41,7 +43,7 @@ export default class NewClass extends cc.Component {
     }
 
     getPos(i, j) {
-        let planeSize = this.plane.getContentSize();
+        let planeSize = this.plane.node.getContentSize();
         let origin = cc.v2(-planeSize.width * 0.5, -planeSize.height * 0.5)
         let goSize = this.block.data.getContentSize();
         let pos = origin.add(cc.v2((i + 0.5)* goSize.width ,  (j + 0.5) * goSize.height));
