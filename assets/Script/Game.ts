@@ -1,13 +1,3 @@
-// Learn TypeScript:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/typescript.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-
 import Plane from "./Plane"
 
 const { ccclass, property } = cc._decorator;
@@ -22,7 +12,9 @@ export default class NewClass extends cc.Component {
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {}
+    onLoad () {
+        window.game = this;
+    }
 
     start() {
 
@@ -34,22 +26,26 @@ export default class NewClass extends cc.Component {
                 let pos = this.getPos(i, j);
 
                 go.setPosition(pos);
+                go.setName(i +''+ j);
 
                 this.plane.addBlock(go);
 
+                let box = go.getBoundingBox();
+                console.log(box);
+
             }
         }
-
     }
 
     getPos(i, j) {
         let planeSize = this.plane.node.getContentSize();
-        let origin = cc.v2(-planeSize.width * 0.5, -planeSize.height * 0.5)
+        let origin = cc.v2(-planeSize.width * 0.5, planeSize.height * 0.5)
         let goSize = this.block.data.getContentSize();
-        let pos = origin.add(cc.v2((i + 0.5)* goSize.width ,  (j + 0.5) * goSize.height));
+        let pos = origin.add(cc.v2((j + 0.5)* goSize.width ,  -(i + 0.5) * goSize.height));
 
         return pos;
     }
+
 
     // update (dt) {}
 }
