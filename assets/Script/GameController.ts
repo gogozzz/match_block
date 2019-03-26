@@ -18,9 +18,11 @@ class GameController {
         //判断竖
         for (let i = 0; i < 3; i++) {
           
-            if(this.blockData[i][0] == this.blockData[i][1] && 
+            if(this.blockData[i][0] != 0 &&
+                this.blockData[i][0] == this.blockData[i][1] && 
                 this.blockData[i][0] == this.blockData[i][2])
                 {
+                    this.blockData[i][0] = this.blockData[i][1] = this.blockData[i][2] = 0;
                     return [true, true, i];
                 }
         }
@@ -28,9 +30,11 @@ class GameController {
         //判断横
         for (let i = 0; i < 3; i++) {
           
-            if(this.blockData[0][i] == this.blockData[1][i] && 
+            if(this.blockData[0][i] != 0 &&
+                this.blockData[0][i] == this.blockData[1][i] && 
                 this.blockData[0][i] == this.blockData[2][i])
                 {
+                    this.blockData[0][i] = this.blockData[1][i] = this.blockData[2][i] = 0;
                     return [true, false, i];
                 }
         }
