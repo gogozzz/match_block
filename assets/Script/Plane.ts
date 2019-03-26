@@ -21,7 +21,7 @@ export default class NewClass extends cc.Component {
     clickedBlockIndex: number = -1;
     isInTouch = false;
 
-    
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
@@ -96,7 +96,7 @@ export default class NewClass extends cc.Component {
         }
     }
 
-   async moveBlock(delta: cc.Vec2) {
+    async moveBlock(delta: cc.Vec2) {
         let absX = Math.abs(delta.x);
         let absY = Math.abs(delta.y);
 
@@ -119,18 +119,16 @@ export default class NewClass extends cc.Component {
                 // element.x += delta.x;
                 nodes.push(element);
             }
-            if (move.x > 0)
-            {
+            if (move.x > 0) {
                 let p = this.blocks[i * 3 + 0];
-                cpyLastNodePos = p.position.add(cc.v2(-100,0));
+                cpyLastNodePos = p.position.add(cc.v2(-100, 0));
                 cpyParentNode = this.blocks[i * 3 + 2];
 
                 moveDirType = EMoveDir.RIGHT;
             }
-            else
-            {
+            else {
                 let p = this.blocks[i * 3 + 2];
-                cpyLastNodePos = p.position.add(cc.v2(100,0));
+                cpyLastNodePos = p.position.add(cc.v2(100, 0));
                 cpyParentNode = this.blocks[i * 3 + 0];
 
                 moveDirType = EMoveDir.LEFT;
@@ -147,16 +145,14 @@ export default class NewClass extends cc.Component {
                 nodes.push(element);
             }
 
-            if (move.y > 0)
-            {
+            if (move.y > 0) {
                 let p = this.blocks[2 * 3 + j];
                 cpyLastNodePos = p.position.add(cc.v2(0, -100));
                 cpyParentNode = this.blocks[0 * 3 + j];
 
                 moveDirType = EMoveDir.UP;
             }
-            else
-            {
+            else {
                 let p = this.blocks[0 * 3 + j];
                 cpyLastNodePos = p.position.add(cc.v2(0, 100));
                 cpyParentNode = this.blocks[2 * 3 + j];
@@ -168,19 +164,19 @@ export default class NewClass extends cc.Component {
         console.log(move);
         console.log(nodes);
 
-       let cpy = cc.instantiate(cpyParentNode);
-       cpyNodes.push(cpy);
-       cpy.setParent(cpyParentNode.getParent());
-       cpy.position = cpyLastNodePos;
-     
-        nodes.forEach(p=>{
+        let cpy = cc.instantiate(cpyParentNode);
+        cpyNodes.push(cpy);
+        cpy.setParent(cpyParentNode.getParent());
+        cpy.position = cpyLastNodePos;
+
+        nodes.forEach(p => {
             let cpy = cc.instantiate(p);
             cpyNodes.push(cpy);
 
             cpy.setParent(p.getParent());
         });
 
-    
+
 
         nodes.forEach(p => {
             p.active = false;
@@ -196,7 +192,7 @@ export default class NewClass extends cc.Component {
             p.active = true;
         });
 
-        this.game.onMove(i,j, moveDirType);
+        this.game.onMove(i, j, moveDirType);
 
     }
 
