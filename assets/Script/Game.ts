@@ -1,4 +1,7 @@
 import Plane from "./Plane"
+import Block from "./Block"
+import gameCtrl from "./GameController";
+import { EMoveDir } from "./Enum";
 
 const { ccclass, property } = cc._decorator;
 
@@ -12,27 +15,48 @@ export default class NewClass extends cc.Component {
 
     // LIFE-CYCLE CALLBACKS:
 
+    blocks: Block[] = [];
+
     onLoad () {
         window.game = this;
     }
 
     start() {
 
+        let data = [0,0,1,
+                    0,0,1,
+                    1,0,0];
+
         for (let i = 0; i < 3; i++) {
 
             for (let j = 0; j < 3; j++) {
 
-                let go = cc.instantiate(this.block);
+                let go = cc.instantiate(this.block) as cc.Node;
                 let pos = this.getPos(i, j);
 
                 go.setPosition(pos);
-                go.setName(i +''+ j);
+                go.name = i +''+ j;
+
+                let block = go.getComponent(Block);
+                this.blocks.push(block);
 
                 this.plane.addBlock(go);
+            }
+        }
 
-                let box = go.getBoundingBox();
-                console.log(box);
+        this.initBlockByData(gameCtrl.blockData);
+    }
 
+    initBlockByData(data: Array<Array<number>>) {
+
+        for (let i = 0; i < data.length; i++) {
+            const tmp = data[i];
+            for (let j = 0; j < tmp.length; j++) {
+                const v = tmp[j];
+                let index = i * 3 + j;
+                let block = this.blocks[index];
+                block.setIndex(index);
+                block.setId(v);
             }
         }
     }
@@ -41,11 +65,15 @@ export default class NewClass extends cc.Component {
         let planeSize = this.plane.node.getContentSize();
         let origin = cc.v2(-planeSize.width * 0.5, planeSize.height * 0.5)
         let goSize = this.block.data.getContentSize();
-        let pos = origin.add(cc.v2((j + 0.5)* goSize.width ,  -(i + 0.5) * goSize.height));
+        let pos = origin.add(cc.v2((j + 0.5) * goSize.width ,  -(i + 0.5) * goSize.height));
 
         return pos;
     }
 
+    onMove(i, j, dir: EMoveDir) {
+        gameCtrl.moveBlock(i,j, dir);
+        this.initBlockByData(gameCtrl.blockData);
+    } 
 
     // update (dt) {}
 }

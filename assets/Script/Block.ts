@@ -28,8 +28,11 @@ export default class NewClass extends cc.Component {
     }
 
     updateNdoeColor() {
-        this.background.color = cc.Color.GRAY;
-
+        if (this.id == 0) {
+            this.background.color = cc.Color.GRAY;
+        }else if (this.id == 1) {
+            this.background.color = cc.Color.ORANGE;
+        }
     }
 
 }

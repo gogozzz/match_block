@@ -1,14 +1,16 @@
 
 import {EMoveDir} from "./Enum" 
 
-const {ccclass, property} = cc._decorator;
 
 const row = 20;
 const col = 20;
 
-@ccclass
-export default class NewClass extends cc.Component {
-    blocks : number[][];
+class GameController {
+    blockData : Array<Array<number>> = [
+        [0,0,1],
+        [0,0,1],
+        [1,0,0]
+    ];
 
 
     checkLineUp() {
@@ -16,8 +18,8 @@ export default class NewClass extends cc.Component {
         //判断竖
         for (let i = 0; i < 3; i++) {
           
-            if(this.blocks[i][0] == this.blocks[i][1] && 
-                this.blocks[i][0] == this.blocks[i][2])
+            if(this.blockData[i][0] == this.blockData[i][1] && 
+                this.blockData[i][0] == this.blockData[i][2])
                 {
                     return [true, true, i];
                 }
@@ -26,8 +28,8 @@ export default class NewClass extends cc.Component {
         //判断横
         for (let i = 0; i < 3; i++) {
           
-            if(this.blocks[0][i] == this.blocks[1][i] && 
-                this.blocks[0][i] == this.blocks[2][i])
+            if(this.blockData[0][i] == this.blockData[1][i] && 
+                this.blockData[0][i] == this.blockData[2][i])
                 {
                     return [true, false, i];
                 }
@@ -45,42 +47,35 @@ export default class NewClass extends cc.Component {
     moveBlock(i, j, dir: EMoveDir) {
         if (dir == EMoveDir.DOWN) {
 
-            let t = this.blocks[2][i];
-            this.blocks[2][i] = this.blocks[1][i];
-            this.blocks[1][i] = this.blocks[0][i];
-            this.blocks[0][i] = t;
+            let t = this.blockData[2][j];
+            this.blockData[2][j] = this.blockData[1][j];
+            this.blockData[1][j] = this.blockData[0][j];
+            this.blockData[0][j] = t;
         }
         else if (dir == EMoveDir.UP) {
 
-            let t = this.blocks[0][i];
-            this.blocks[0][i] = this.blocks[1][i];
-            this.blocks[1][i] = this.blocks[2][i];
-            this.blocks[2][i] = t;
+            let t = this.blockData[0][j];
+            this.blockData[0][j] = this.blockData[1][j];
+            this.blockData[1][j] = this.blockData[2][j];
+            this.blockData[2][j] = t;
         }
         else if (dir == EMoveDir.RIGHT) {
 
-            let t = this.blocks[i][0];
-            this.blocks[i][0] = this.blocks[i][1];
-            this.blocks[i][1] = this.blocks[i][2];
-            this.blocks[i][2] = t;
+            let t = this.blockData[i][2];
+            this.blockData[i][2] = this.blockData[i][1];
+            this.blockData[i][1] = this.blockData[i][0];
+            this.blockData[i][0] = t;
         }
         else if (dir == EMoveDir.LEFT) {
 
-            let t = this.blocks[i][2];
-            this.blocks[i][2] = this.blocks[i][1];
-            this.blocks[i][1] = this.blocks[i][0];
-            this.blocks[i][0] = t;
+            let t = this.blockData[i][0];
+            this.blockData[i][0] = this.blockData[i][1];
+            this.blockData[i][1] = this.blockData[i][2];
+            this.blockData[i][2] = t;
         }
-
     }
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {}
-
-    start () {
-
-    }
-
-    // update (dt) {}
 }
+
+const gameCtrl = new GameController();
+window.gameCtrl = gameCtrl;
+export default gameCtrl; 

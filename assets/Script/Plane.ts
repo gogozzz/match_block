@@ -1,5 +1,6 @@
 import Game from './Game'
 import { doMoveAction } from './Functions';
+import { EMoveDir } from './Enum';
 
 const { ccclass, property } = cc._decorator;
 
@@ -108,6 +109,7 @@ export default class NewClass extends cc.Component {
 
         let cpyLastNodePos: cc.Vec2;
         let cpyParentNode: cc.Node;
+        let moveDirType: EMoveDir;
 
         if (absX > absY) {
             move = cc.v2((delta.x / absX) * 100, 0);
@@ -121,13 +123,17 @@ export default class NewClass extends cc.Component {
             {
                 let p = this.blocks[i * 3 + 0];
                 cpyLastNodePos = p.position.add(cc.v2(-100,0));
-                cpyParentNode = p;
+                cpyParentNode = this.blocks[i * 3 + 2];
+
+                moveDirType = EMoveDir.RIGHT;
             }
             else
             {
                 let p = this.blocks[i * 3 + 2];
                 cpyLastNodePos = p.position.add(cc.v2(100,0));
-                cpyParentNode = p;
+                cpyParentNode = this.blocks[i * 3 + 0];
+
+                moveDirType = EMoveDir.LEFT;
             }
         }
         else {
@@ -145,13 +151,17 @@ export default class NewClass extends cc.Component {
             {
                 let p = this.blocks[2 * 3 + j];
                 cpyLastNodePos = p.position.add(cc.v2(0, -100));
-                cpyParentNode = p;
+                cpyParentNode = this.blocks[0 * 3 + j];
+
+                moveDirType = EMoveDir.UP;
             }
             else
             {
                 let p = this.blocks[0 * 3 + j];
                 cpyLastNodePos = p.position.add(cc.v2(0, 100));
-                cpyParentNode = p;
+                cpyParentNode = this.blocks[2 * 3 + j];
+
+                moveDirType = EMoveDir.DOWN;
             }
         }
 
@@ -186,6 +196,7 @@ export default class NewClass extends cc.Component {
             p.active = true;
         });
 
+        this.game.onMove(i,j, moveDirType);
 
     }
 
