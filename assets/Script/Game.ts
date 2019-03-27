@@ -1,7 +1,8 @@
 import Plane from "./Plane"
 import Block from "./Block"
-import gameCtrl from "./GameController";
 import { EMoveDir } from "./Enum";
+import { gameCtrl } from "./GameController";
+
 
 const { ccclass, property } = cc._decorator;
 
@@ -9,9 +10,9 @@ const { ccclass, property } = cc._decorator;
 export default class NewClass extends cc.Component {
 
     @property(Plane)
-    plane = null;
+    plane: Plane = null;
     @property(cc.Prefab)
-    block = null;
+    block: cc.Prefab = null;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -23,13 +24,11 @@ export default class NewClass extends cc.Component {
 
     start() {
 
-        let data = [0,0,1,
-                    0,0,1,
-                    1,0,0];
+        gameCtrl.genInitData();
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 4; i++) {
 
-            for (let j = 0; j < 3; j++) {
+            for (let j = 0; j < 4; j++) {
 
                 let go = cc.instantiate(this.block) as cc.Node;
                 let pos = this.getPos(i, j);
@@ -53,7 +52,7 @@ export default class NewClass extends cc.Component {
             const tmp = data[i];
             for (let j = 0; j < tmp.length; j++) {
                 const v = tmp[j];
-                let index = i * 3 + j;
+                let index = i * tmp.length + j;
                 let block = this.blocks[index];
                 block.setIndex(index);
                 block.setId(v);
@@ -72,7 +71,7 @@ export default class NewClass extends cc.Component {
 
     onMove(i, j, dir: EMoveDir) {
         gameCtrl.moveBlock(i,j, dir);
-        gameCtrl.checkLineUp();
+        // gameCtrl.checkLineUp();
         
         this.initBlockByData(gameCtrl.blockData);
     } 

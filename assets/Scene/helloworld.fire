@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.3627067307857992,
-      "y": 0.3627067307857992,
+      "x": 0.4843994140625,
+      "y": 0.4843994140625,
       "z": 1
     },
     "_quat": {
@@ -365,8 +365,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 300,
-      "height": 300
+      "width": 400,
+      "height": 400
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -425,8 +425,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 300,
-      "height": 300
+      "width": 400,
+      "height": 400
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -580,6 +580,9 @@
     "_enabled": true,
     "EventPlane": {
       "__id__": 11
+    },
+    "Background": {
+      "__id__": 9
     },
     "_id": "eckeQRV79NlYshDNFSQKyT"
   },

@@ -1,6 +1,8 @@
 import Game from './Game'
+import Block from './Block'
 import { doMoveAction } from './Functions';
 import { EMoveDir } from './Enum';
+import { colNum, rowNum } from './GameController';
 
 const { ccclass, property } = cc._decorator;
 
@@ -8,6 +10,8 @@ const { ccclass, property } = cc._decorator;
 export default class NewClass extends cc.Component {
     @property(cc.Node)
     EventPlane = null;
+    @property(cc.Node)
+    Background = null;
 
 
     game: Game = null;
@@ -51,7 +55,6 @@ export default class NewClass extends cc.Component {
 
     touchCancel(ev) {
         console.log("touchCancel");
-
     }
 
     touchMove(ev) {
@@ -88,6 +91,7 @@ export default class NewClass extends cc.Component {
 
             if (box.contains(pos)) {
                 this.clickedBlockIndex = index;
+
                 console.log(index);
 
                 return element;
@@ -96,12 +100,16 @@ export default class NewClass extends cc.Component {
         }
     }
 
+    getblock(i, j) {
+        return this.blocks[i * rowNum + j];
+    }
+
     async moveBlock(delta: cc.Vec2) {
         let absX = Math.abs(delta.x);
         let absY = Math.abs(delta.y);
 
-        let i = Math.floor(this.clickedBlockIndex / 3);
-        let j = Math.floor(this.clickedBlockIndex % 3);
+        let i = Math.floor(this.clickedBlockIndex / rowNum);
+        let j = Math.floor(this.clickedBlockIndex % rowNum);
 
         let move: cc.Vec2;
         let nodes: cc.Node[] = [];
@@ -114,22 +122,22 @@ export default class NewClass extends cc.Component {
         if (absX > absY) {
             move = cc.v2((delta.x / absX) * 100, 0);
 
-            for (let index = 0; index < 3; index++) {
-                const element = this.blocks[i * 3 + index];
+            for (let index = 0; index < colNum; index++) {
+                const element = this.getblock(i, index);
                 // element.x += delta.x;
                 nodes.push(element);
             }
             if (move.x > 0) {
-                let p = this.blocks[i * 3 + 0];
+                let p = this.getblock(i, 0);
                 cpyLastNodePos = p.position.add(cc.v2(-100, 0));
-                cpyParentNode = this.blocks[i * 3 + 2];
+                cpyParentNode = this.getblock(i, rowNum - 1);
 
                 moveDirType = EMoveDir.RIGHT;
             }
             else {
-                let p = this.blocks[i * 3 + 2];
+                let p = this.getblock(i, rowNum - 1);
                 cpyLastNodePos = p.position.add(cc.v2(100, 0));
-                cpyParentNode = this.blocks[i * 3 + 0];
+                cpyParentNode = this.getblock(i, 0);
 
                 moveDirType = EMoveDir.LEFT;
             }
@@ -137,25 +145,24 @@ export default class NewClass extends cc.Component {
         else {
             move = cc.v2(0, (delta.y / absY) * 100);
 
-            for (let index = 0; index < 3; index++) {
-                let idx = index * 3 + j;
-                const element = this.blocks[idx];
+            for (let index = 0; index < rowNum; index++) {
+                const element = this.getblock(index, j);
                 // element.y += delta.y;
 
                 nodes.push(element);
             }
 
             if (move.y > 0) {
-                let p = this.blocks[2 * 3 + j];
+                let p = this.getblock(colNum - 1, j);
                 cpyLastNodePos = p.position.add(cc.v2(0, -100));
-                cpyParentNode = this.blocks[0 * 3 + j];
+                cpyParentNode = this.getblock(0, j);
 
                 moveDirType = EMoveDir.UP;
             }
             else {
-                let p = this.blocks[0 * 3 + j];
+                let p = this.getblock(0, j);
                 cpyLastNodePos = p.position.add(cc.v2(0, 100));
-                cpyParentNode = this.blocks[2 * 3 + j];
+                cpyParentNode = this.getblock(colNum - 1, j);
 
                 moveDirType = EMoveDir.DOWN;
             }

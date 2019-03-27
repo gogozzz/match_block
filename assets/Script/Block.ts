@@ -14,7 +14,7 @@ export default class NewClass extends cc.Component {
     // update (dt) {}
 
     start () {
-        this.updateNdoeColor();
+        // this.updateNdoeColor();
     }
 
     setIndex(index: number) {
@@ -28,10 +28,14 @@ export default class NewClass extends cc.Component {
     }
 
     updateNdoeColor() {
+        this.node.opacity = 255;
         if (this.id == 0) {
             this.background.color = cc.Color.GRAY;
         }else if (this.id == 1) {
             this.background.color = cc.Color.ORANGE;
+        }
+        else if (this.id == -1) {
+            this.node.opacity = 0;
         }
     }
 
