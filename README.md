@@ -1,2 +1,2 @@
-# hello-world
-Hello world new project template.
+# 项目说明：
+    1.使用TypeScript开发。
