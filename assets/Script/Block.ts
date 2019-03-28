@@ -3,7 +3,9 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class NewClass extends cc.Component {
     @property(cc.Node)
-    background = null;
+    background: cc.Node = null;
+    @property(cc.Label)
+    label: cc.Label = null;
 
     id: number;
     index: number;
@@ -31,11 +33,14 @@ export default class NewClass extends cc.Component {
         this.node.opacity = 255;
         if (this.id == 0) {
             this.background.color = cc.Color.GRAY;
-        }else if (this.id == 1) {
+            this.label.string = "";
+        }else if (this.id > 0) {
             this.background.color = cc.Color.ORANGE;
+            this.label.string = this.id.toString();
         }
         else if (this.id == -1) {
             this.node.opacity = 0;
+            this.label.string = "";
         }
     }
 

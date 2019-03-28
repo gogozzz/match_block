@@ -47,6 +47,7 @@ export default class NewClass extends cc.Component {
     }
 
     initBlockByData(data: Array<Array<number>>) {
+        console.log(data);
 
         for (let i = 0; i < data.length; i++) {
             const tmp = data[i];
