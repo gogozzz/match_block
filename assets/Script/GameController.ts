@@ -71,13 +71,13 @@ class GameController {
                 if (v > 0) {
                     let imove = 0;
                     for (let j = i - 1; j >= 0; j-- {
-                        let v = this.blockData[j][y];
-                        if (v == 0) {
+                        let t = this.blockData[j][y];
+                        if (t == 0) {
                             imove = j;
                         }
                     }
 
-                    if (imove > 0) {
+                    if (imove >= 0) {
                         this.blockData[imove][y] = v;
                         this.blockData[i][y] = 0;
                         let js = {
@@ -96,13 +96,13 @@ class GameController {
                 if (v > 0) {
                     let imove = 0;
                     for (let j = i + 1; j < colNum - 1; j++) {
-                        let v = this.blockData[j][y];
-                        if (v == 0) {
+                        let t = this.blockData[j][y];
+                        if (t == 0) {
                             imove = j;
                         }
                     }
 
-                    if (imove > 0) {
+                    if (imove >= 0) {
                         this.blockData[imove][y] = v;
                         this.blockData[i][y] = 0;
                         let js = {
@@ -121,13 +121,13 @@ class GameController {
                 if (v > 0) {
                     let imove = 0;
                     for (let j = i - 1; j >= 0; j-- {
-                        let v = this.blockData[x][j];
-                        if (v == 0) {
+                        let t = this.blockData[x][j];
+                        if (t == 0) {
                             imove = j;
                         }
                     }
 
-                    if (imove > 0) {
+                    if (imove >= 0) {
                         this.blockData[x][imove] = v;
                         this.blockData[x][i] = 0;
                         let js = {
@@ -146,13 +146,13 @@ class GameController {
                 if (v > 0) {
                     let imove = 0;
                     for (let j = i + 1; j < colNum - 1; j++) {
-                        let v = this.blockData[x][j];
-                        if (v == 0) {
+                        let t = this.blockData[x][j];
+                        if (t == 0) {
                             imove = j;
                         }
                     }
 
-                    if (imove > 0) {
+                    if (imove >= 0) {
                         this.blockData[x][imove] = v;
                         this.blockData[x][i] = 0;
                         let js = {

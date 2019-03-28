@@ -71,7 +71,7 @@ export default class NewClass extends cc.Component {
     }
 
     onMove(i, j, dir: EMoveDir) {
-        gameCtrl.moveBlock(i,j, dir);
+        gameCtrl.checkMove(i,j, dir);
         // gameCtrl.checkLineUp();
         
         this.initBlockByData(gameCtrl.blockData);

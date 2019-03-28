@@ -2,7 +2,7 @@ import Game from './Game'
 import Block from './Block'
 import { doMoveAction } from './Functions';
 import { EMoveDir } from './Enum';
-import { colNum, rowNum } from './GameController';
+import { rowNum } from './GameController';
 
 const { ccclass, property } = cc._decorator;
 
@@ -70,7 +70,30 @@ export default class NewClass extends cc.Component {
         let delta = this.curClickPos.sub(this.preClickPos);
 
         if (delta.mag() > 30) {
-            this.moveBlock(delta);
+            //this.moveBlock(delta);
+
+            let absX = Math.abs(delta.x);
+            let absY = Math.abs(delta.y);
+    
+            let i = Math.floor(this.clickedBlockIndex / rowNum);
+            let j = Math.floor(this.clickedBlockIndex % rowNum);
+
+            if (absX > absY) {
+                if (delta.x > 0) {
+                    this.game.onMove(i,j, EMoveDir.RIGHT);
+                }
+                else {
+                    this.game.onMove(i,j, EMoveDir.LEFT);
+                }
+            }else {
+                if (delta.y > 0) {
+                    this.game.onMove(i,j, EMoveDir.UP);
+                }
+                else {
+                    this.game.onMove(i,j, EMoveDir.DOWN);
+                }
+            }
+
         }
     }
 
