@@ -2,6 +2,7 @@ import Plane from "./Plane"
 import Block from "./Block"
 import { EMoveDir } from "./Enum";
 import { gameCtrl } from "./GameController";
+import { delay } from "./Functions";
 
 
 const { ccclass, property } = cc._decorator;
@@ -72,14 +73,17 @@ export default class NewClass extends cc.Component {
         return pos;
     }
 
-    onMove(i, j, dir: EMoveDir) {
+    async onMove(i, j, dir: EMoveDir) {
         gameCtrl.checkMove(i, j, dir);
         gameCtrl.checkLineUp(i, j, dir);
-        
         this.score.string = "Score: "+ gameCtrl.score;
-
+        this.initBlockByData(gameCtrl.blockData);
+        
+        await delay(100);
         gameCtrl.checkMove(i, j, dir);
+        this.initBlockByData(gameCtrl.blockData);
 
+        await delay(100);
         if (gameCtrl.isHasTwoZeroBlock()) {
             gameCtrl.genNextStepData();
         }

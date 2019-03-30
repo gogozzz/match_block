@@ -199,13 +199,13 @@ class GameController {
     }
 
     checkScore(...args) {
-        if (args[0] > 0 && args[1] == args[2] && args[1] == args[3]) {
+        if (args[0] > 0 && args[1] > 0 && args[1] == args[2] && args[1] == args[3]) {
             return 3;
         }
-        else if (args[0] > 0 && args[1] == args[2] && args[1] != args[3]) {
+        else if (args[0] > 0  && args[1] > 0 && args[1] == args[2] && args[1] != args[3]) {
             return 2;
         }
-        else if (args[1] > 0 && args[2] == args[3]) {
+        else if (args[1] > 0  && args[2] > 0 && args[2] == args[3]) {
             return 1;
         }
         return 0;
