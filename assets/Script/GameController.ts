@@ -12,6 +12,8 @@ class GameController {
         [1, 0, 0, 0]
     ];
 
+    score: number;
+
     randomOneBlock() {
         let rand = Math.random()
         if (rand > 0.1) {
@@ -22,7 +24,22 @@ class GameController {
         }
     }
 
+    isHasTwoZeroBlock() {
+        let ok = 0;
+        for (let i = 0; i < colNum; i++) {
+            for (let j = 0; j < rowNum; j++) {
+                let v = this.blockData[i][j];
+                if (v == 0) {
+                    ok += 1;
+                }
+            }
+        }
+        return ok > 1;
+    }
+
     randomOneZeroBlock() {
+
+
         let i = Math.floor(Math.random() * rowNum);
         let j = Math.floor(Math.random() * colNum);
 
@@ -45,6 +62,7 @@ class GameController {
     }
 
     genInitData() {
+        this.score = 0;
         for (let i = 0; i < rowNum; i++) {
             for (let j = 0; j < colNum; j++) {
                 let v = this.randomOneBlock();
@@ -66,18 +84,21 @@ class GameController {
 
         let res = [];
         if (dir == EMoveDir.DOWN) {
-            for (let i = colNum - 2; i >= 0; i--) {
+            for (let i = rowNum - 2; i >= 0; i--) {
                 let v = this.blockData[i][y];
                 if (v > 0) {
-                    let imove = 0;
-                    for (let j = i - 1; j >= 0; j-- {
+                    let imove = i;
+                    for (let j = i + 1; j < rowNum; j++ {
                         let t = this.blockData[j][y];
                         if (t == 0) {
                             imove = j;
                         }
+                        else {
+                            break;
+                        }
                     }
 
-                    if (imove >= 0) {
+                    if (imove != i) {
                         this.blockData[imove][y] = v;
                         this.blockData[i][y] = 0;
                         let js = {
@@ -91,18 +112,21 @@ class GameController {
             }
         }
         else if (dir == EMoveDir.UP) {
-            for (let i = 1; i < colNum - 1; i++) {
+            for (let i = 1; i < rowNum; i++) {
                 let v = this.blockData[i][y];
                 if (v > 0) {
-                    let imove = 0;
-                    for (let j = i + 1; j < colNum - 1; j++) {
+                    let imove = i;
+                    for (let j = i - 1; j >= 0; j--) {
                         let t = this.blockData[j][y];
                         if (t == 0) {
                             imove = j;
                         }
+                        else {
+                            break;
+                        }
                     }
 
-                    if (imove >= 0) {
+                    if (imove != i) {
                         this.blockData[imove][y] = v;
                         this.blockData[i][y] = 0;
                         let js = {
@@ -116,18 +140,20 @@ class GameController {
             }
         }
         else if (dir == EMoveDir.LEFT) {
-            for (let i = colNum - 2; i >= 0; i--) {
+            for (let i = 1; i < rowNum; i++) {
                 let v = this.blockData[x][i];
                 if (v > 0) {
-                    let imove = 0;
-                    for (let j = i - 1; j >= 0; j-- {
+                    let imove = i;
+                    for (let j = i - 1; j >= 0; j--) {
                         let t = this.blockData[x][j];
                         if (t == 0) {
                             imove = j;
+                        } else {
+                            break;
                         }
                     }
 
-                    if (imove >= 0) {
+                    if (imove != i) {
                         this.blockData[x][imove] = v;
                         this.blockData[x][i] = 0;
                         let js = {
@@ -141,18 +167,20 @@ class GameController {
             }
         }
         else if (dir == EMoveDir.RIGHT) {
-            for (let i = 1; i < colNum - 1; i++) {
+            for (let i = rowNum - 2; i >= 0; i--) {
                 let v = this.blockData[x][i];
                 if (v > 0) {
-                    let imove = 0;
-                    for (let j = i + 1; j < colNum - 1; j++) {
+                    let imove = i;
+                    for (let j = i + 1; j < rowNum; j++) {
                         let t = this.blockData[x][j];
                         if (t == 0) {
                             imove = j;
+                        } else {
+                            break;
                         }
                     }
 
-                    if (imove >= 0) {
+                    if (imove != i) {
                         this.blockData[x][imove] = v;
                         this.blockData[x][i] = 0;
                         let js = {
@@ -169,33 +197,98 @@ class GameController {
         return res;
     }
 
+    checkScore(...args) {
+        if (args[0] > 0 && args[1] == args[2] && args[1] == args[3]) {
+            return 3;
+        }
+        else if (args[0] > 0 && args[1] == args[2] && args[1] != args[3]) {
+            return 2;
+        }
+        else if (args[1] > 0 && args[2] == args[3]) {
+            return 1;
+        }
+        return 0;
+    }
 
-    checkLineUp() {
+    checkLineUp(i, j, dir: EMoveDir) {
 
+        let score = 0;
         //判断竖
-        for (let i = 0; i < 3; i++) {
-
-            if (this.blockData[i][0] != 0 &&
-                this.blockData[i][0] == this.blockData[i][1] &&
-                this.blockData[i][0] == this.blockData[i][2]) {
-                this.blockData[i][0] = this.blockData[i][1] = this.blockData[i][2] = 0;
-                return [true, true, i];
+        if (dir == EMoveDir.RIGHT) {
+            score = this.checkScore(this.blockData[i][3], this.blockData[i][2], this.blockData[i][1], this.blockData[i][0]);
+            if (score == 3) {
+                this.blockData[i][3] -= this.blockData[i][2];
+                this.blockData[i][3] = this.blockData[i][3] < 0 ? 0 : this.blockData[i][3];
+                this.blockData[i][2] = this.blockData[i][1] = this.blockData[i][0] = 0;
+            } else if (score == 2) {
+                this.blockData[i][3] -= this.blockData[i][2];
+                this.blockData[i][3] = this.blockData[i][3] < 0 ? 0 : this.blockData[i][3];
+                this.blockData[i][2] = this.blockData[i][1] = 0;
+            } else if (score == 1) {
+                this.blockData[i][2] -= this.blockData[i][1];
+                this.blockData[i][2] = this.blockData[i][2] < 0 ? 0 : this.blockData[i][2];
+                this.blockData[i][1] = this.blockData[i][0] = 0;
+            }
+        }
+        else if (dir == EMoveDir.LEFT) {
+            score = this.checkScore(this.blockData[i][0], this.blockData[i][1], this.blockData[i][2], this.blockData[i][3]);
+            if (score == 3) {
+                this.blockData[i][0] -= this.blockData[i][1];
+                this.blockData[i][0] = this.blockData[i][0] < 0 ? 0 : this.blockData[i][0];
+                this.blockData[i][1] = this.blockData[i][2] = this.blockData[i][3] = 0;
+            } else if (score == 2) {
+                this.blockData[i][0] -= this.blockData[i][1];
+                this.blockData[i][0] = this.blockData[i][0] < 0 ? 0 : this.blockData[i][0];
+                this.blockData[i][1] = this.blockData[i][2] = 0;
+            } else if (score == 1) {
+                this.blockData[i][1] -= this.blockData[i][2];
+                this.blockData[i][1] = this.blockData[i][1] < 0 ? 0 : this.blockData[i][1];
+                this.blockData[i][2] = this.blockData[i][3] = 0;
             }
         }
 
-        //判断横
-        for (let i = 0; i < 3; i++) {
-
-            if (this.blockData[0][i] != 0 &&
-                this.blockData[0][i] == this.blockData[1][i] &&
-                this.blockData[0][i] == this.blockData[2][i]) {
-                this.blockData[0][i] = this.blockData[1][i] = this.blockData[2][i] = 0;
-                return [true, false, i];
+        else if (dir == EMoveDir.DOWN) {
+            score = this.checkScore(this.blockData[3][j], this.blockData[2][j], this.blockData[1][j], this.blockData[0][j]);
+            if (score == 3) {
+                this.blockData[3][j] -= this.blockData[2][j];
+                this.blockData[3][j] = this.blockData[3][j] < 0 ? 0 : this.blockData[3][j];
+                this.blockData[i][2] = this.blockData[i][1] = this.blockData[i][0] = 0;
+            } else if (score == 2) {
+                this.blockData[3][j] -= this.blockData[2][j];
+                this.blockData[3][j] = this.blockData[3][j] < 0 ? 0 : this.blockData[3][j];
+                this.blockData[2][j] = this.blockData[1][j] = 0;
+            } else if (score == 1) {
+                this.blockData[2][j] -= this.blockData[1][j];
+                this.blockData[2][j] = this.blockData[2][j] < 0 ? 0 : this.blockData[2][j];
+                this.blockData[1][j] = this.blockData[0][j] = 0;
             }
         }
 
-        return [false, false, 0];
+        else if (dir == EMoveDir.UP) {
+            score = this.checkScore(this.blockData[0][j], this.blockData[1][j], this.blockData[2][j], this.blockData[3][j]);
+            if (score == 3) {
+                this.blockData[0][j] -= this.blockData[1][j];
+                this.blockData[0][j] = this.blockData[0][j] < 0 ? 0 : this.blockData[0][j];
+                this.blockData[1][j] = this.blockData[2][j] = this.blockData[3][j] = 0;
+            } else if (score == 2) {
+                this.blockData[0][j] -= this.blockData[1][j];
+                this.blockData[0][j] = this.blockData[0][j] < 0 ? 0 : this.blockData[0][j];
+                this.blockData[1][j] = this.blockData[2][j] = 0;
+            } else if (score == 1) {
+                this.blockData[1][j] -= this.blockData[2][j];
+                this.blockData[1][j] = this.blockData[1][j] < 0 ? 0 : this.blockData[1][j];
+                this.blockData[2][j] = this.blockData[3][j] = 0;
+            }
+        }
 
+        if (score == 3)
+        {
+            this.score += 3;
+        }else if (score == 2 || score == 1) {
+            this.score += 1;
+        }
+
+        return score;
 
     }
 

@@ -13,17 +13,19 @@ export default class NewClass extends cc.Component {
     plane: Plane = null;
     @property(cc.Prefab)
     block: cc.Prefab = null;
+    @property(cc.Label)
+    score: cc.Label = null;
 
     // LIFE-CYCLE CALLBACKS:
 
     blocks: Block[] = [];
 
-    onLoad () {
+    onLoad() {
         window.game = this;
     }
 
     start() {
-
+        this.score.string = "Score: 0";
         gameCtrl.genInitData();
 
         for (let i = 0; i < 4; i++) {
@@ -34,7 +36,7 @@ export default class NewClass extends cc.Component {
                 let pos = this.getPos(i, j);
 
                 go.setPosition(pos);
-                go.name = i +''+ j;
+                go.name = i + '' + j;
 
                 let block = go.getComponent(Block);
                 this.blocks.push(block);
@@ -65,17 +67,26 @@ export default class NewClass extends cc.Component {
         let planeSize = this.plane.node.getContentSize();
         let origin = cc.v2(-planeSize.width * 0.5, planeSize.height * 0.5)
         let goSize = this.block.data.getContentSize();
-        let pos = origin.add(cc.v2((j + 0.5) * goSize.width ,  -(i + 0.5) * goSize.height));
+        let pos = origin.add(cc.v2((j + 0.5) * goSize.width, -(i + 0.5) * goSize.height));
 
         return pos;
     }
 
     onMove(i, j, dir: EMoveDir) {
-        gameCtrl.checkMove(i,j, dir);
-        // gameCtrl.checkLineUp();
+        gameCtrl.checkMove(i, j, dir);
+        gameCtrl.checkLineUp(i, j, dir);
         
+        this.score.string = "Score: "+ gameCtrl.score;
+
+        gameCtrl.checkMove(i, j, dir);
+
+        if (gameCtrl.isHasTwoZeroBlock()) {
+            gameCtrl.genNextStepData();
+        }
+        // gameCtrl.checkLineUp();
+
         this.initBlockByData(gameCtrl.blockData);
-    } 
+    }
 
     // update (dt) {}
 }
