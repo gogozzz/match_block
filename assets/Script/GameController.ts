@@ -69,7 +69,8 @@ class GameController {
                 this.blockData[i][j] = v;
             }
         }
-
+        let p = this.randomOneZeroBlock();
+        this.blockData[p.i][p.j] = 2019;
         this.genNextStepData();
     }
 
