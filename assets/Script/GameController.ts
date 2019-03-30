@@ -286,7 +286,7 @@ class GameController {
         {
             this.score += 3;
         }else if (score == 2 || score == 1) {
-            this.score += 1;
+            this.score += 2;
         }
 
         return score;
