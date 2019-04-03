@@ -18,3 +18,6 @@ export async function doMoveAction(dt: number, delta: cc.Vec2, nodes: cc.Node[])
 
 }
 
+export function delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
