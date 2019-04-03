@@ -87,10 +87,10 @@ export default class NewClass extends cc.Component {
                 }
             }else {
                 if (delta.y > 0) {
-                    this.game.onMove(i,j, EMoveDir.UP);
+                   this.game.onMove(i,j, EMoveDir.UP);
                 }
                 else {
-                    this.game.onMove(i,j, EMoveDir.DOWN);
+                   this.game.onMove(i,j, EMoveDir.DOWN);
                 }
             }
 

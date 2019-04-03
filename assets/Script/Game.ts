@@ -3,6 +3,7 @@ import Block from "./Block"
 import { EMoveDir } from "./Enum";
 import { gameCtrl } from "./GameController";
 import { BlockModel } from "./BlockModel";
+import { delay } from "./Functions";
 
 
 const { ccclass, property } = cc._decorator;
@@ -75,16 +76,23 @@ export default class NewClass extends cc.Component {
         return pos;
     }
 
-    onMove(i, j, dir: EMoveDir) {
+    async onMove(i, j, dir: EMoveDir) {
         gameCtrl.checkMove(i, j, dir);
-        let n = gameCtrl.checkLineUp(i, j, dir);
-        gameCtrl.genNextStepData(n);
-
-        this.score.string = "Score: " + gameCtrl.score;
-
-        gameCtrl.checkMove(i, j, dir);
-
         this.initBlockByData(gameCtrl.blockModels);
+        
+        let n = gameCtrl.checkLineUp(i, j, dir);
+        await delay(200);
+        this.initBlockByData(gameCtrl.blockModels);
+
+        gameCtrl.checkMove(i, j, dir);
+        await delay(200);
+        this.initBlockByData(gameCtrl.blockModels);
+
+        gameCtrl.genNextStepData(n);
+        await delay(200);
+        this.initBlockByData(gameCtrl.blockModels);
+        
+        this.score.string = "Score: " + gameCtrl.score;
     }
 
     // update (dt) {}
