@@ -2,7 +2,7 @@ import Game from './Game'
 import Block from './Block'
 import { doMoveAction } from './Functions';
 import { EMoveDir } from './Enum';
-import { rowNum } from './GameController';
+import { rowNum, colNum } from './GameController';
 
 const { ccclass, property } = cc._decorator;
 

@@ -2,6 +2,7 @@ import Plane from "./Plane"
 import Block from "./Block"
 import { EMoveDir } from "./Enum";
 import { gameCtrl } from "./GameController";
+import { BlockModel } from "./BlockModel";
 
 
 const { ccclass, property } = cc._decorator;
@@ -26,8 +27,12 @@ export default class NewClass extends cc.Component {
 
     start() {
         this.score.string = "Score: 0";
+        this.createBlockNodes();
         gameCtrl.genInitData();
+        this.initBlockByData(gameCtrl.blockModels);
+    }
 
+    createBlockNodes() {
         for (let i = 0; i < 4; i++) {
 
             for (let j = 0; j < 4; j++) {
@@ -44,21 +49,19 @@ export default class NewClass extends cc.Component {
                 this.plane.addBlock(go);
             }
         }
-
-        this.initBlockByData(gameCtrl.blockData);
     }
 
-    initBlockByData(data: Array<Array<number>>) {
-        console.log(data);
+    initBlockByData(data: Array<Array<BlockModel>>) {
 
         for (let i = 0; i < data.length; i++) {
             const tmp = data[i];
             for (let j = 0; j < tmp.length; j++) {
                 const v = tmp[j];
+
                 let index = i * tmp.length + j;
                 let block = this.blocks[index];
-                block.setIndex(index);
-                block.setId(v);
+                block.init(v);
+
             }
         }
     }
@@ -74,18 +77,14 @@ export default class NewClass extends cc.Component {
 
     onMove(i, j, dir: EMoveDir) {
         gameCtrl.checkMove(i, j, dir);
-        gameCtrl.checkLineUp(i, j, dir);
-        
-        this.score.string = "Score: "+ gameCtrl.score;
+        let n = gameCtrl.checkLineUp(i, j, dir);
+        gameCtrl.genNextStepData(n);
+
+        this.score.string = "Score: " + gameCtrl.score;
 
         gameCtrl.checkMove(i, j, dir);
 
-        if (gameCtrl.isHasTwoZeroBlock()) {
-            gameCtrl.genNextStepData();
-        }
-        // gameCtrl.checkLineUp();
-
-        this.initBlockByData(gameCtrl.blockData);
+        this.initBlockByData(gameCtrl.blockModels);
     }
 
     // update (dt) {}
